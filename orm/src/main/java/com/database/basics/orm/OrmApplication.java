@@ -1,13 +1,13 @@
-package com.springOrm.SpringOrm;
+package com.database.basics.orm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringOrmApplication {
+public class OrmApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringOrmApplication.class, args);
+		SpringApplication.run(OrmApplication.class, args);
 	}
 
 }

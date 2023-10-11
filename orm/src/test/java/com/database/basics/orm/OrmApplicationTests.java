@@ -1,10 +1,10 @@
-package com.springOrm.SpringOrm;
+package com.database.basics.orm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringOrmApplicationTests {
+class OrmApplicationTests {
 
 	@Test
 	void contextLoads() {
