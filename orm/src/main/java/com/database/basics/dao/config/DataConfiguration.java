@@ -1,13 +1,17 @@
-package com.database.basics.orm;
+package com.database.basics.dao.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -28,7 +32,7 @@ public class DataConfiguration {
     @Value("${spring.datasource.password}")
     private String dataSourcePassword;
 
-        @Value("${spring.dataspource.hibernate.dialect}")
+    @Value("${spring.dataspource.hibernate.dialect}")
     private String hibernateDialect;
 
 
@@ -38,7 +42,7 @@ public class DataConfiguration {
         try {
             LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
             localContainerEntityManagerFactoryBean.setDataSource(dataSource());
-            localContainerEntityManagerFactoryBean.setPackagesToScan("com.mettl.authenticator.entities");
+            localContainerEntityManagerFactoryBean.setPackagesToScan("com.database.basics.entity");
             localContainerEntityManagerFactoryBean.setPersistenceUnitName("dw");
             HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
 
@@ -73,7 +77,24 @@ public class DataConfiguration {
         Properties prop = new Properties();
         prop.put("hibernate.dialect", hibernateDialect);
         prop.put("hibernate.show_sql", "true");
+        prop.setProperty("hibernate.hbm2ddl.auto", "update");
+
         return prop;
     }
+
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+        return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean
+    public PlatformTransactionManager platformTransactionManager(
+            EntityManagerFactory emf) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(emf);
+
+        return transactionManager;
+    }
+
 
 }
